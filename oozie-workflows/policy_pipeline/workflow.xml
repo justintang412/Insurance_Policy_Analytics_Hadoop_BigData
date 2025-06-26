@@ -1,0 +1,84 @@
+<workflow-app name="policy-etl-workflow" xmlns="uri:oozie:workflow:0.5">
+    <start to="ingestion-fork"/>
+
+    <fork name="ingestion-fork">
+        <path start="sqoop-policies"/>
+        <path start="sqoop-customers"/>
+        <path start="sqoop-payments"/>
+        <path start="sqoop-coverages"/>
+        <path start="sqoop-schedules"/>
+        <path start="sqoop-endorsements"/>
+    </fork>
+
+    <!-- Sqoop Actions for Parallel Ingestion -->
+    <action name="sqoop-policies">
+        <sqoop xmlns="uri:oozie:sqoop-action:0.4">
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <command>import --connect jdbc:oracle:thin:@... --table POLICIES --target-dir /user/hive/warehouse/policies_raw --as-parquetfile --split-by policy_id -m 16 --hive-import --hive-table policies_raw --hive-overwrite</command>
+        </sqoop>
+        <ok to="ingestion-join"/>
+        <error to="kill"/>
+    </action>
+    <action name="sqoop-customers">
+        <sqoop xmlns="uri:oozie:sqoop-action:0.4">
+            <command>import --connect jdbc:oracle:thin:@... --table CUSTOMERS --target-dir /user/hive/warehouse/customers_raw --as-parquetfile --split-by customer_id -m 8 --hive-import --hive-table customers_raw --hive-overwrite</command>
+        </sqoop>
+        <ok to="ingestion-join"/>
+        <error to="kill"/>
+    </action>
+    <!-- ... Other 4 Sqoop actions for payments, coverages, etc. go here ... -->
+
+    <join name="ingestion-join" to="spark-cleansing"/>
+
+    <!-- Spark Transformation Sequence -->
+    <action name="spark-cleansing">
+        <spark xmlns="uri:oozie:spark-action:0.2">
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <master>yarn</master>
+            <mode>cluster</mode>
+            <name>CleansingJob</name>
+            <class>com.ncl.CleansingSparkJob</class>
+            <jar>${workflowAppPath}/lib/transformation-jobs.jar</jar>
+            <arg>/user/hive/warehouse</arg>
+            <arg>/user/hadoop/processed/cleansed</arg>
+        </spark>
+        <ok to="spark-validation"/>
+        <error to="kill"/>
+    </action>
+
+    <action name="spark-validation">
+        <spark xmlns="uri:oozie:spark-action:0.2">
+            <master>yarn</master>
+            <mode>cluster</mode>
+            <name>ValidationJob</name>
+            <class>com.ncl.ValidationSparkJob</class>
+            <jar>${workflowAppPath}/lib/transformation-jobs.jar</jar>
+            <arg>/user/hadoop/processed/cleansed</arg>
+            <arg>/user/hadoop/processed/validated</arg>
+        </spark>
+        <ok to="spark-deduplication"/>
+        <error to="kill"/>
+    </action>
+    
+    <action name="spark-deduplication">
+        <spark xmlns="uri:oozie:spark-action:0.2">
+            <master>yarn</master>
+            <mode>cluster</mode>
+            <name>DeduplicationJob</name>
+            <class>com.ncl.DeduplicationSparkJob</class>
+            <jar>${workflowAppPath}/lib/transformation-jobs.jar</jar>
+            <arg>/user/hadoop/processed/validated</arg>
+            <arg>/user/hadoop/processed/deduped</arg>
+        </spark>
+        <ok to="end"/> <!-- Chain to next Spark job -->
+        <error to="kill"/>
+    </action>
+    <!-- ... Other ~7 Spark actions go here, chained sequentially ... -->
+
+    <kill name="kill">
+        <message>Workflow failed, error message[${wf:errorMessage(wf:lastErrorNode())}]</message>
+    </kill>
+    <end name="end"/>
+</workflow-app>

@@ -1,0 +1,14 @@
+<coordinator-app name="daily-policy-pipeline"
+                 frequency="${coord:days(1)}"
+                 start="${start_time}" end="${end_time}" timezone="UTC"
+                 xmlns="uri:oozie:coordinator:0.4">
+   <controls>
+        <timeout>1440</timeout> <!-- 24 hours -->
+        <concurrency>1</concurrency>
+   </controls>
+   <action>
+      <workflow>
+         <app-path>${workflowAppPath}/workflow.xml</app-path>
+      </workflow>
+   </action>
+</coordinator-app>

@@ -1,0 +1,13 @@
+import \
+    --connect jdbc:oracle:thin:@<pas-oracle-db-host>:1521/<service_name> \
+    --username <pas_user> \
+    --password-file hdfs:///user/hadoop/secure/pas.password \
+    --table COVERAGES \
+    --target-dir /user/hive/warehouse/coverages_raw \
+    --as-parquetfile \
+    --split-by coverage_id \
+    -m 8 \
+    --hive-import \
+    --hive-database default \
+    --hive-table coverages_raw \
+    --hive-overwrite

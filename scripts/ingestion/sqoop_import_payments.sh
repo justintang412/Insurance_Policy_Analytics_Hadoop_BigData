@@ -1,0 +1,13 @@
+import \
+    --connect jdbc:oracle:thin:@<pas-oracle-db-host>:1521/<service_name> \
+    --username <pas_user> \
+    --password-file hdfs:///user/hadoop/secure/pas.password \
+    --table PAYMENTS \
+    --target-dir /user/hive/warehouse/payments_raw \
+    --as-parquetfile \
+    --split-by payment_id \
+    -m 8 \
+    --hive-import \
+    --hive-database default \
+    --hive-table payments_raw \
+    --hive-overwrite
