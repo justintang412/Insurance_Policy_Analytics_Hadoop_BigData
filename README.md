@@ -7,7 +7,7 @@ This project, the **Policy Analytics Platform**, was a strategic initiative to b
 The primary goal was to create a "single source of truth" for over 30 million customer policy records, transforming raw, siloed data into a reliable corporate asset. This foundational platform unlocked critical business intelligence capabilities, enabled advanced data science, and established a reference architecture for future data projects within the organization.
 
   * **Domain:** Insurance Policy & Enrollment Analytics
-  * **Data Scale:** \~30 million historical records, 50+ TB of transactional history
+  * **Data Scale:** \~30 million customer enrollments, 50+ TB of transactional history
 
 ## 2\. The Business Problem
 
