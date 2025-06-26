@@ -67,9 +67,11 @@ The platform delivered significant, measurable value to the business:
 
 For a more detailed look into the project's technical implementation, please see the following documents:
 
-  * [**Requirement.md**](https://www.google.com/search?q=Requirement.md): Details the business needs, project scope, and key objectives.
-  * [**Hadoop\_Cluster.md**](https://www.google.com/search?q=Hadoop_Cluster.md): A step-by-step guide on setting up the 100-node on-premise Hadoop cluster.
-  * [**Apache\_Sqoop.md**](https://www.google.com/search?q=Apache_Sqoop.md): Outlines the setup of the data ingestion layer using Sqoop and the initial Hive data warehouse structure.
-  * [**Spark\_Hive\_HBase.md**](https://www.google.com/search?q=Spark_Hive_HBase.md): Details the installation of core processing and access components like Spark, Hive, and HBase.
-  * [**Apache\_Oozie.md**](https://www.google.com/search?q=Apache_Oozie.md): Describes the Oozie setup and the workflow files used to automate the daily ETL pipeline.
-  * [**Developer\_Guide.md**](https://www.google.com/search?q=Developer_Guide.md): A comprehensive guide on the end-to-end developer workflow, from local coding to cluster deployment and debugging.
+ For a more detailed look into the project's technical implementation, please see the following documents:
+
+  * [**Requirement.md**](docs/Requirement.md): Business needs, project scope, and key objectives.
+  * [**Hadoop\_Cluster.md**](docs/Hadoop_Cluster.md): Setting up the 100-node on-premise Hadoop cluster.
+  * [**Apache\_Sqoop.md**](docs/Apache_Sqoop.md): Setup of the data ingestion layer using Sqoop and the initial Hive data warehouse structure.
+  * [**Spark\_Hive\_HBase.md**](docs/Spark_Hive_HBase.md): Details the installation of core processing and access components like Spark, Hive, and HBase.
+  * [**Apache\_Oozie.md**](docs/Apache_Oozie.md): Oozie setup and the workflow files used to automate the daily ETL pipeline.
+  * [**Code.md**](docs/Code.md): End-to-end developer workflow, from local coding to cluster deployment and debugging.
