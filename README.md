@@ -34,7 +34,7 @@ The platform was built on a 100-node on-premise CentOS cluster using a standard 
 ### Core Components:
 
   * **Infrastructure:** On-premise cluster of \~100 VMs running CentOS 7.5.
-  * **Data Ingestion:** **Apache Sqoop** for daily bulk imports from the Oracle Policy Administration System (PAS).
+  * **Data Ingestion:** **Apache Sqoop** for daily bulk imports from the Policy Administration System (PAS).
   * **Data Storage:** **Hadoop Distributed File System (HDFS)** as the primary data lake, with Transparent Data Encryption (TDE) enabled.
   * **Data Processing:** **Apache Spark** for all large-scale batch processing and data transformation logic, running on YARN.
   * **Data Access:** **Apache Hive** to provide analysts with a familiar SQL-like interface to query the processed data in the data warehouse.
